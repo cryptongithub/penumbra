@@ -20,8 +20,6 @@ git checkout 005-mneme
 
 cd $HOME/penumbra && cargo build --release --bin pcli 
 
-cd $HOME/penumbra && cargo run --quiet --release --bin pcli sync
-
 cd $HOME/penumbra &&  cargo run --quiet --release --bin pcli wallet generate
 
 ADDRESS=$(cargo run --quiet --release --bin pcli addr list | grep -oP '(?<=penumbra).*')
