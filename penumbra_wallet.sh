@@ -1,4 +1,5 @@
-#!/bin/baif 
+#!/bin/bash
+
 if curl > /dev/null 2>&1; then
 	echo ''
 else
