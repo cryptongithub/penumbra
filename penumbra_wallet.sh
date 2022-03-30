@@ -11,10 +11,6 @@ sudo apt update && sudo apt upgrade -y
 
 sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
 
-echo -e '\n\e[42m==================================================\e[0m\n' 
-echo -e '\e[32mPress \e[31m1 and Enter\e[0m \e[32mwhen you will be promted.\e[0m'
-echo -e '\n\e[42m==================================================\e[0m\n' && sleep 5
-
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source ~/.cargo/env 
 
@@ -22,9 +18,11 @@ rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra && 
 
 git checkout 005-mneme
 
-cargo build --release --bin pcli 
+cd $HOME/penumbra && cargo build --release --bin pcli 
 
-cargo run --quiet --release --bin pcli wallet generate
+cd $HOME/penumbra && cargo run --quiet --release --bin pcli sync
+
+cd $HOME/penumbra &&  cargo run --quiet --release --bin pcli wallet generate
 
 ADDRESS=$(cargo run --quiet --release --bin pcli addr list | grep -oP '(?<=penumbra).*')
 
