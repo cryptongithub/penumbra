@@ -15,9 +15,9 @@ sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essentia
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source ~/.cargo/env 
 
-rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra && cd $HOME/penumbra
+rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
 
-git checkout 005-mneme
+cd penumbra && git checkout 006-orthosie
 
 cd $HOME/penumbra && cargo build --release --bin pcli 
 
