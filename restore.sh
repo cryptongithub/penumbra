@@ -12,7 +12,7 @@ sudo apt update && sudo apt upgrade -y
 
 sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
 
-if exists cargo; then
+if cargo > /dev/null 2>&1; then
 	echo ''
 else
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
