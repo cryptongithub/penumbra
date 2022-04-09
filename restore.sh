@@ -12,7 +12,12 @@ sudo apt update && sudo apt upgrade -y
 
 sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+if exists cargo; then
+	echo ''
+else
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
 source ~/.cargo/env 
 
 rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
