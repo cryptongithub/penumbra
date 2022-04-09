@@ -20,6 +20,8 @@ fi
 
 source ~/.cargo/env 
 
+sudo rm -r /root/.local/share/pcli/penumbra_wallet.json && sudo rm -rf /root/.local/share/penumbra-testnet-archive/
+
 rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
 
 cd penumbra && git checkout 006-orthosie
