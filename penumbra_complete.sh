@@ -141,7 +141,7 @@ function deletePenumbra {
 }
 
 
-echo -e '\e[40m\e[92mPlease enter your choice (input your option number and press enter): \e[0m'
+echo -e '\e[40m\e[92mPlease enter your choice (input your option number and press Enter): \e[0m'
 options=("Create wallet (only generation, no sync)" "Create wallet (with sync)" "Restore wallet and sync" "Backup wallet" "Show wallet address" "Check balance" "Stake" "Unstake" "Send" "Delete Penumbra" "Quit")
 select option in "${options[@]}"
 do
@@ -185,12 +185,12 @@ do
             sendPenumbra
             break
             ;;
-		    "Delete")
+	  "Delete")
             echo -e '\e[40m\e[91mMake sure you back up your wallet.\e[0m' && sleep 2
             backupPenumbra
             echo -e '\n\e[40m\e[91mDeleting Penumbra...\e[0m\n' && sleep 2
             deletePenumbra
-			      break
+	    break
             ;;
         "Quit")
             break
