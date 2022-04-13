@@ -9,11 +9,13 @@ fi
 curl -s https://raw.githubusercontent.com/cryptongithub/init/main/logo.sh | bash && sleep 1
 
 function createnosyncWallet {
+      echo -e '\n\e[40m\e[92m1. Starting update...\e[0m'
       sudo apt update && sudo apt upgrade -y
       sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
       if cargo > /dev/null 2>&1; then
-        echo ''
+        echo -e '\n\e[40m\e[92mSkipped Rust installation.\n\e[0m'
       else
+      	echo -e '\n\e[40m\e[92mStarting Rust installation...\e[0m'
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
       fi
       source ~/.cargo/env
@@ -36,11 +38,13 @@ function createnosyncWallet {
 }
 
 function createsyncWallet {
+      echo -e '\n\e[40m\e[92m1. Starting update...\e[0m'
       sudo apt update && sudo apt upgrade -y
       sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
       if cargo > /dev/null 2>&1; then
-        echo ''
+        echo -e '\n\e[40m\e[92mSkipped Rust installation.\n\e[0m'
       else
+      	echo -e '\n\e[40m\e[92mStarting Rust installation...\e[0m'
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
       fi
       source ~/.cargo/env
@@ -64,11 +68,13 @@ function createsyncWallet {
 }
 
 function restoreWallet {
+      echo -e '\n\e[40m\e[92m1. Starting update...\e[0m'
       sudo apt update && sudo apt upgrade -y
       sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
       if cargo > /dev/null 2>&1; then
-        echo ''
+        echo -e '\n\e[40m\e[92mSkipped Rust installation.\n\e[0m'
       else
+      	echo -e '\n\e[40m\e[92mStarting Rust installation...\e[0m'
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
       fi
       source ~/.cargo/env
