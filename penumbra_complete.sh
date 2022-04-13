@@ -6,7 +6,7 @@ else
   sudo apt install curl -y
 fi
 
-clear && curl -s https://raw.githubusercontent.com/cryptongithub/init/main/logo.sh | bash && sleep 1
+curl -s https://raw.githubusercontent.com/cryptongithub/init/main/logo.sh | bash && sleep 1
 
 function createnosyncWallet {
       sudo apt update && sudo apt upgrade -y
