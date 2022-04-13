@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if curl > /dev/null 2>&1; then
+if curl -s https://raw.githubusercontent.com/cryptongithub/init/main/empty.sh > /dev/null 2>&1; then
 	echo ''
 else
   sudo apt install curl -y
@@ -9,7 +9,7 @@ fi
 curl -s https://raw.githubusercontent.com/cryptongithub/init/main/logo.sh | bash && sleep 1
 
 function createnosyncWallet {
-      echo -e '\n\e[40m\e[92m1. Starting update...\e[0m'
+      echo -e '\n\e[40m\e[92mStarting update...\e[0m'
       sudo apt update && sudo apt upgrade -y
       sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
       if cargo > /dev/null 2>&1; then
@@ -21,7 +21,7 @@ function createnosyncWallet {
       source ~/.cargo/env
       sudo rm -r /root/.local/share/pcli/penumbra_wallet.json && sudo rm -rf /root/.local/share/penumbra-testnet-archive/
       rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
-      cd penumbra && git checkout 006-orthosie
+      cd penumbra && git fetch origin && git checkout 007-herse
       cd $HOME/penumbra && cargo build --release --bin pcli 
       cd $HOME/penumbra &&  cargo run --quiet --release --bin pcli wallet generate
       ADDRESS=$(cd $HOME/penumbra && cargo run --quiet --release --bin pcli addr list | grep -oP '(?<=penumbra).*')
@@ -38,7 +38,8 @@ function createnosyncWallet {
 }
 
 function createsyncWallet {
-      echo -e '\n\e[40m\e[92m1. Starting update...\e[0m'
+      echo -e '\n\e[40m\e[92mCreating wallet with sync...\e[0m\n' && sleep 2
+      echo -e '\n\e[40m\e[92mStarting update...\e[0m'
       sudo apt update && sudo apt upgrade -y
       sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
       if cargo > /dev/null 2>&1; then
@@ -50,7 +51,7 @@ function createsyncWallet {
       source ~/.cargo/env
       sudo rm -r /root/.local/share/pcli/penumbra_wallet.json && sudo rm -rf /root/.local/share/penumbra-testnet-archive/
       rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
-      cd penumbra && git checkout 006-orthosie
+      cd penumbra && git fetch origin && git checkout 007-herse
       cd $HOME/penumbra && cargo build --release --bin pcli 
       cd $HOME/penumbra &&  cargo run --quiet --release --bin pcli wallet generate
       cd $HOME/penumbra && cargo run --quiet --release --bin pcli sync
@@ -68,30 +69,35 @@ function createsyncWallet {
 }
 
 function restoreWallet {
-      echo -e '\n\e[40m\e[92m1. Starting update...\e[0m'
-      sudo apt update && sudo apt upgrade -y
-      sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
-      if cargo > /dev/null 2>&1; then
-        echo -e '\n\e[40m\e[92mSkipped Rust installation.\n\e[0m'
-      else
-      	echo -e '\n\e[40m\e[92mStarting Rust installation...\e[0m'
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-      fi
-      source ~/.cargo/env
-      echo -e '\e[40m\e[91mMake sure you back up your wallet\e[0m' && sleep 3
-      echo -e '\nSpend seed:'
-      cat /root/.local/share/pcli/penumbra_wallet.json | grep -oP '(?<="spend_seed": ").*?(?=")'
-      rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
-      cd $HOME/penumbra && git checkout 006-orthosie
-      cargo build --release --bin pcli
-      sudo rm -r /root/.local/share/pcli/penumbra_wallet.json && sudo rm -rf /root/.local/share/penumbra-testnet-archive/
-      echo -e '\e[40m\e[92m' && read -p "Enter spend seed: " SPENDSEED && echo -e '\e[0m'
-      cd $HOME/penumbra && cargo run --quiet --release --bin pcli wallet import $SPENDSEED 
-      SPENDSEED=
-      cd $HOME/penumbra && cargo run --quiet --release --bin pcli wallet reset
-      export RUST_LOG=info
-      cd $HOME/penumbra && cargo run --quiet --release --bin pcli sync
-      cd $HOME/penumbra && cargo run --quiet --release --bin pcli balance
+	echo -e '\n\e[40m\e[92mRestoring wallet and sync...\e[0m' && sleep 2
+	echo -e '\n\e[40m\e[92mStarting update...\e[0m'
+	sudo apt update && sudo apt upgrade -y
+	sudo apt install make git tar wget clang pkg-config libssl-dev jq build-essential -y
+	if cargo > /dev/null 2>&1; then
+		echo -e '\n\e[40m\e[92mSkipped Rust installation.\n\e[0m'
+	else
+		echo -e '\n\e[40m\e[92mStarting Rust installation...\e[0m'
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+	fi
+	source ~/.cargo/env
+	if cat /root/.local/share/pcli/penumbra_wallet.json > /dev/null 2>&1; then
+		echo -e '\e[40m\e[91mMake sure you back up your wallet\e[0m' && sleep 3
+		echo -e '\n\e[40m\e[91mSpend seed:'
+		cat /root/.local/share/pcli/penumbra_wallet.json | grep -oP '(?<="spend_seed": ").*?(?=")' && echo -e '\e[0m\n'
+	else
+		echo -e ''
+	fi
+	rm -rf $HOME/penumbra && git clone https://github.com/penumbra-zone/penumbra
+	cd penumbra && git fetch origin && git checkout 007-herse
+	cargo build --release --bin pcli
+	sudo rm -r /root/.local/share/pcli/penumbra_wallet.json && sudo rm -rf /root/.local/share/penumbra-testnet-archive/
+	echo -e '\e[40m\e[92m' && read -p "Enter spend seed: " SPENDSEED && echo -e '\e[0m'
+	cd $HOME/penumbra && cargo run --quiet --release --bin pcli wallet import $SPENDSEED 
+	SPENDSEED=
+	cd $HOME/penumbra && cargo run --quiet --release --bin pcli wallet reset
+	export RUST_LOG=info
+	cd $HOME/penumbra && cargo run --quiet --release --bin pcli sync
+	cd $HOME/penumbra && cargo run --quiet --release --bin pcli balance
 }
 
 function backupPenumbra {
@@ -99,8 +105,7 @@ function backupPenumbra {
       echo -e '\n\e[42m==================================================\e[0m\n'
       echo -e '\e[42mSAVE ALL DATA BELOW\e[0m'
       echo -e '\n\e[42m==================================================\e[0m\n' && sleep 2
-      echo -e '\nAddress:'
-      echo 'penumbra'$ADDRESS
+      echo -e '\nAddress: penumbra'$ADDRESS
       echo -e '\nSpend seed:'
       cat /root/.local/share/pcli/penumbra_wallet.json | grep -oP '(?<="spend_seed": ").*?(?=")'
       echo -e '\n\e[42m==================================================\e[0m\n'
@@ -135,6 +140,7 @@ function unstakePenumbra {
 
 function sendPenumbra {
       echo -e '\e[40m\e[92m' && read -p "Enter destination address: " DESTINATION_ADDRESS && echo -e '\e[0m'
+      backupPenumbra
       echo -e '\e[40m\e[92m' && read -p "Enter amount: " AMOUNT && echo -e '\e[0m' && AMOUNT=$AMOUNT'penumbra'
       cd $HOME/penumbra && cargo run --quiet --release --bin pcli tx send $AMOUNT --to $DESTINATION_ADDRESS
       DESTINATION_ADDRESS=
@@ -142,6 +148,9 @@ function sendPenumbra {
 }
 
 function deletePenumbra {
+      echo -e '\e[40m\e[91mMake sure you back up your wallet.\e[0m' && sleep 2
+      backupPenumbra
+      echo -e '\n\e[40m\e[91mDeleting Penumbra...\e[0m\n' && sleep 2
       rm -rf $HOME/penumbra 
       sudo rm -r /root/.local/share/pcli/penumbra_wallet.json && sudo rm -rf /root/.local/share/penumbra-testnet-archive/
 }
@@ -153,17 +162,14 @@ select option in "${options[@]}"
 do
     case $option in
         "Create wallet (only generation, no sync)")
-            echo -e '\n\e[42mCreating wallet without sync ...\e[0m\n' && sleep 2
             createnosyncWallet
             break
             ;;
          "Create wallet (with sync)")
-            echo -e '\n\e[42mCreating wallet with sync...\e[0m\n' && sleep 2
             createsyncWallet
             break
             ;;
         "Restore wallet and sync")
-            echo -e '\n\e[42mRestoring wallet and sync...\e[0m\n' && sleep 2
             restoreWallet
             break
             ;;
@@ -192,9 +198,6 @@ do
             break
             ;;
 	  "Delete")
-            echo -e '\e[40m\e[91mMake sure you back up your wallet.\e[0m' && sleep 2
-            backupPenumbra
-            echo -e '\n\e[40m\e[91mDeleting Penumbra...\e[0m\n' && sleep 2
             deletePenumbra
 	    break
             ;;
